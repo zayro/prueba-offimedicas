@@ -25,7 +25,7 @@ Route::post('/auth/register', 'AuthController@register');
 // VIEW
 Route::get('/', 'view\ViewController@login');
 Route::get('/register', 'view\ViewController@register');
-
+Route::get('/{db}/filters/{table}/{field}/{condition}', 'GeneralController@filter');
 
 $router->group(['prefix' => 'api', 'middleware' => 'jwt.auth'], function () {
 

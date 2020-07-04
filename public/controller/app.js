@@ -23,8 +23,23 @@ app.controller('controllerLogin', function ($scope, $http, $location) {
                 });
 
                 window.location.href = "./api/informacion";
+            } else {
+
+                swal({
+                    title: "Ocurrio un problema",
+                    text: "verificar las credencias de auntenticacion",
+                    icon: "error",
+                    button: "Cerrar",
+                });
             }
 
+        }).catch(function (response) {
+            swal({
+                title: "Ocurrio un problema",
+                text: "verificar las credencias de auntenticacion",
+                icon: "error",
+                button: "Cerrar",
+            });
         });
 
 
@@ -44,7 +59,7 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
     $scope.tipo_envio = null;
     $scope.form = {};
 
-    $scope.cancelar = function (){
+    $scope.cancelar = function () {
         $scope.form = {};
         $scope.active_form = false;
 
@@ -80,7 +95,7 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
 
         $scope.table_user = $('#TableInfo').DataTable({
 
-            ajax: 'offimedicas/all/grupo_familiar',
+            ajax: 'offimedicas/filters/grupo_familiar/id_usuario/' + id_usuario,
             deferRender: true,
             columns: [{
                     visible: true,
@@ -154,44 +169,87 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
     };
 
     $scope.select_load_grupo_familiar = function () {
-        $scope.table_user.ajax.url('offimedicas/all/grupo_familiar').load();
+        $scope.table_user.ajax.url('offimedicas/filters/grupo_familiar/id_usuario/' + id_usuario).load();
     };
+
+
+
+    $scope.buscar = function (id) {
+
+        return $http({
+            method: "GET",
+            url: "./offimedicas/filters/usuarios/identificacion/" + id
+        })
+
+    }
 
     $scope.crear = function () {
         console.log('enviando form');
 
         $scope.form.id_usuario = id_usuario;
 
-        const send = {
-            "insert": "grupo_familiar",
-            "values": [$scope.form]
-        };
+        const validar = $scope.buscar($scope.form.identificacion);
 
+        validar.then(function (response) {
 
-        $http({
-            method: "POST",
-            url: "./offimedicas/createAutoincrement",
-            data: send
+            console.log('buscando si existe el usuario', response.data.count);
 
-        }).then(function (reponse) {
-            console.log(reponse);
-            if (reponse.data.status === true) {
+            if (response.data.count > 0) {
+
 
                 swal({
-                    title: "Registro Creado",
-                    icon: "success",
+                    title: "Ocurrio un problema",
+                    text: 'usuario ya existe con esa identificacion',
+                    icon: "error",
                     button: "Cerrar",
                 });
 
-                $scope.select_load_grupo_familiar();
-
-                $scope.active_form = false;
-
-                $scope.form = {};
+                return false;
 
             }
 
+            const send = {
+                "insert": "grupo_familiar",
+                "values": [$scope.form]
+            };
+
+
+            $http({
+                method: "POST",
+                url: "./offimedicas/createAutoincrement",
+                data: send
+
+            }).then(function (reponse) {
+                console.log(reponse);
+                if (reponse.data.status === true) {
+
+                    swal({
+                        title: "Registro Creado",
+                        icon: "success",
+                        button: "Cerrar",
+                    });
+
+                    $scope.select_load_grupo_familiar();
+
+                    $scope.active_form = false;
+
+                    $scope.form = {};
+
+                } else {
+                    swal({
+                        title: "Ocurrio un problema",
+                        text: 'identificacion ya existe',
+                        icon: "error",
+                        button: "Cerrar",
+                    });
+                }
+
+            });
+
+
         });
+
+
 
 
 
@@ -234,7 +292,7 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
 
     $scope.actualizar = function () {
 
-        const id =  $scope.form.id_grupo_familiar;
+        const id = $scope.form.id_grupo_familiar;
         delete $scope.form.id_grupo_familiar;
 
 

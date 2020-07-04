@@ -35,10 +35,10 @@
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 
 
-            <script>
-            var id_usuario = <?php print $_SESSION['user'][0]->id_usuario ?>;
-        </script>
 
+    <script>
+        var id_usuario = <?php print $_SESSION['user'][0]->id_usuario ?>;
+    </script>
 
 </head>
 
@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-lg-12">
 
-                        <table id="TableInfo" class="table table-striped table-bordered table-hover table-condensed" >
+                        <table id="TableInfo" class="table table-striped table-bordered table-hover table-condensed">
                             <thead>
                                 <tr>
                                     <td></td>
@@ -84,56 +84,70 @@
             <div class="row" ng-if="active_form">
 
                 <div class="col-lg-12">
-                    <form id="guardar" ng-submit="enviar(tipo_envio)">
 
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nombres</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.nombres" required>
+                    <div class="card text-center">
+                        <div class="card-header">
+                            {{title_form}} Grupo Familiar
                         </div>
 
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Apellidos</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.apellidos" required>
+                        <div class="card-body">
+
+                            <form id="guardar" ng-submit="enviar(tipo_envio)">
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nombres</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                        ng-model="form.nombres" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Apellidos</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                        ng-model="form.apellidos" required>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Edad</label>
+                                    <input type="number" class="form-control" id="exampleInputEmail1"
+                                        ng-model="form.edad" required>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">parentesco</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                        ng-model="form.parentesco" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nro. Identificacion</label>
+                                    <input type="number" class="form-control" id="exampleInputEmail1" ng-disabled="tipo_envio == 'edit'"
+                                        ng-model="form.identificacion" required>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <button type="button" class="btn btn-secondary  btn-lg btn-block"
+                                            ng-click="cancelar()">Cancelar</button>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
                         </div>
-
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Edad</label>
-                            <input type="number" class="form-control" id="exampleInputEmail1" ng-model="form.edad" required>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">parentesco</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.parentesco" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nro. Identificacion</label>
-                            <input type="number" class="form-control" id="exampleInputEmail1" ng-model="form.identificacion"
-                                required>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <button type="button" class="btn btn-secondary  btn-lg btn-block" ng-click="cancelar()">Cancelar</button>
-                            </div>
-                            <div class="col-lg-6">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar</button>
-                            </div>
-                        </div>
-
-                </form>
+                    </div>
 
                 </div>
 
+
+
             </div>
-
-
-
         </div>
-    </div>
 
 
 
