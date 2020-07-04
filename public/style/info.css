@@ -1,0 +1,13 @@
+.info-fondo {
+    background: url("../assets/images/playstation-pattern.png");
+    background-repeat: repeat;
+    height: 100vh;
+
+}
+
+
+.info-center {
+
+    padding-top: 30px;
+
+}

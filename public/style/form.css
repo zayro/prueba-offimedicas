@@ -1,0 +1,46 @@
+.full-with {
+    width: 100%;
+}
+
+.login-center {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    width: 50%;
+    margin: 0 auto;
+    transform: translate(-50%, -50%);
+}
+
+.fondo {
+    margin: 0;
+    background-image: url("../assets/images/principal.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+}
+
+.main-fondo {
+    margin: 0;
+    background: url("../assets/images/playstation-pattern.png");
+    background-repeat: repeat;
+    height: 100vh;
+
+}
+
+.info-fondo {
+    background: url("../assets/images/playstation-pattern.png");
+    background-repeat: repeat;
+    height: 100vh;
+
+}
+
+.login-image {
+    padding: 20px;
+}
+
+
+body {
+    height: 100vh;
+}
