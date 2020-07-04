@@ -29,16 +29,7 @@ Route::get('/register', 'view\ViewController@register');
 
 $router->group(['prefix' => 'api', 'middleware' => 'jwt.auth'], function () {
 
-    /*
-    $router->get('/{db}[/{table}]', function ($db, $table =  null)    {
-        // Matches The "/admin/users" URL
-        echo $db.'bien'.$table;
-    });
-    */
 
-    /**
-     * General Api
-     */
 
     Route::get('/{db}/all/{table}', 'GeneralController@all');
     Route::get('/{db}/field/{table}/', 'GeneralController@field');
@@ -55,11 +46,14 @@ $router->group(['prefix' => 'api', 'middleware' => 'jwt.auth'], function () {
 
 
     Route::put('/{db}/edit/', 'GeneralController@edit');
-    Route::delete('/{db}/destroy/', 'GeneralController@destroy');
+    Route::post('/{db}/destroy/', 'GeneralController@destroy');
+    Route::delete('/{db}/destroy/{table}/{field}/{id}', 'GeneralController@delete');
 
     Route::post('/auth/register', 'AuthController@register');
 
     Route::get('/informacion', 'view\ViewController@informacion');
+
+    Route::get('/salir', 'view\ViewController@salir');
 
 
 

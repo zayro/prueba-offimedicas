@@ -2,23 +2,6 @@ var app = angular.module('app', []);
 
 app.controller('controllerLogin', function ($scope, $http, $location) {
 
-    $scope.buscar = function(){
-
-        $http({
-            method: "GET", url: "./unsafe/offimedicas/all/informacion/",
-            //params: data
-
-        }).then(function (reponse) {
-            console.log(reponse);
-            if (reponse.data.success === true) {
-                console.log('execute select_load_user: ', data.request.patient_data_pid);
-                // $scope.select_load_user(data.request.patient_data_pid);
-             }
-
-        });
-
-
-    }
 
     $scope.form = {};
 
@@ -26,7 +9,8 @@ app.controller('controllerLogin', function ($scope, $http, $location) {
 
 
         $http({
-            method: "POST", url: "./auth/login",
+            method: "POST",
+            url: "./auth/login",
             data: $scope.form
 
         }).then(function (reponse) {
@@ -36,10 +20,10 @@ app.controller('controllerLogin', function ($scope, $http, $location) {
                     title: "Authenticacion exitosa",
                     icon: "success",
                     button: "Cerrar",
-                  });
+                });
 
-                  window.location.href = "./informacion";
-             }
+                window.location.href = "./api/informacion";
+            }
 
         });
 
@@ -52,68 +36,53 @@ app.controller('controllerLogin', function ($scope, $http, $location) {
 
 });
 
-app.controller('controllerRegistro', function ($scope, $http, $location) {
-
-    $scope.form = {};
-
-    $scope.enviar = function () {
-
-
-        $http({
-            method: "POST", url: "./auth/register",
-            data: $scope.form
-
-        }).then(function (data) {
-            console.log(data);
-            if (data.success === true) {
-                console.log('execute select_load_user: ', data.request.patient_data_pid);
-                // $scope.select_load_user(data.request.patient_data_pid);
-             }
-
-        });
-
-
-        console.log($scope.form);
-    }
-
-
-});
 
 
 app.controller('controllerInformacion', function ($scope, $http, $location) {
 
-    $scope.buscar = function(){
+    $scope.active_form = false;
+    $scope.tipo_envio = null;
+    $scope.form = {};
 
-        $http({
-            method: "GET", url: "./api/offimedicas/all/grupo_familiar/"
-        }).then(function (reponse) {
-            console.log(reponse);
-            if (reponse.data.success === true) {
-                console.log('execute select_load_user: ', data.request.patient_data_pid);
-                // $scope.select_load_user(data.request.patient_data_pid);
-             }
-
-        });
-
+    $scope.cancelar = function (){
+        $scope.form = {};
+        $scope.active_form = false;
 
     }
 
-    $scope.select_grupo_familiar = function ()
-    {
+    $scope.toggle = function () {
+        $scope.active_form = !$scope.active_form;
+    };
+
+    $scope.enviar = function (dato) {
+
+        switch (dato) {
+            case 'add':
+                $scope.crear();
+                break;
+            case 'edit':
+                $scope.actualizar();
+                break;
+            default:
+                console.log('no se reconoce');
+                break;
+        }
+
+    }
+
+    $scope.select_grupo_familiar = function () {
 
         if ($.fn.dataTable.isDataTable('#TableInfo')) {
             console.log('se cargo');
-        }
-        else {
+        } else {
             console.log('cargando');
         }
 
-        $('#TableInfo').DataTable({
+        $scope.table_user = $('#TableInfo').DataTable({
 
             ajax: 'offimedicas/all/grupo_familiar',
             deferRender: true,
-            columns: [
-                {
+            columns: [{
                     visible: true,
                     searchable: false,
                     render: function (data, type, full) {
@@ -125,43 +94,56 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
                         `;
                     }
                 },
-                {data: 'nombres'},
-                {data: 'apellidos'},
-                {data: 'edad'},
-                {data: 'parentesco'},
-                {data: 'identificacion'}
+                {
+                    data: 'nombres'
+                },
+                {
+                    data: 'apellidos'
+                },
+                {
+                    data: 'edad'
+                },
+                {
+                    data: 'parentesco'
+                },
+                {
+                    data: 'identificacion'
+                }
             ],
             dom: `<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>
             <'row'<'col-sm-12'tr>>
             <'row'<'col-sm-12 col-md-4'i><'col-sm-12 col-md-4 text-center'l><'col-sm-12 col-md-4'p>>`,
-            buttons: [
-                {
-                  text: '<button class="btn btn-outline-secondary"> Agregar <i  class="fa fa-plus"></i> </button> ',
-                  className: 'btn btn-default btn-xs',
-                  action: function (dt) {
-                    redirect();
-                    console.log('My custom button!');
-                  }
-                },
-              ],
+            buttons: [{
+                text: '<button class="btn btn-outline-secondary"> Agregar <i  class="fa fa-plus"></i> </button> ',
+                className: 'btn btn-default btn-xs',
+                action: function (dt) {
+                    $scope.title_form = "Agregar";
+                    $scope.tipo_envio = 'add';
+                    $scope.active_form = !$scope.active_form;
+                    $scope.form = {};
+                    $scope.$apply();
+
+
+                }
+            }, ],
             rowCallback: function (row, data, index) {
 
-                $('i.fa-plus', row).bind('click', function () {
-                    console.log('data patient', data);
-                    $scope.data_patient = data;
+                $('button.edit', row).bind('click', () => {
+                    $scope.title_form = "Editar";
+                    $scope.tipo_envio = 'edit';
+                    $scope.active_form = true;
+                    $scope.form.edad = parseInt(data.edad);
+                    $scope.form.identificacion = parseInt(data.identificacion);
+                    $scope.form.nombres = data.nombres;
+                    $scope.form.apellidos = data.apellidos;
+                    $scope.form.parentesco = data.parentesco;
+                    $scope.form.id_grupo_familiar = data.id_grupo_familiar;
+
                     $scope.$apply();
-                    $scope.select_load_user(data.pid);
-                    $("#myModal").modal();
-                    return row;
                 });
 
-                $('i.fa-eye', row).bind('click', function () {
-                    console.log('data patient', data);
-                    $scope.select_load_patient_care_team(data.pid);
-
-                    $("#modalViewTeam").modal();
-
-                    return row;
+                $('button.delete', row).bind('click', () => {
+                    $scope.eliminar(data.id_grupo_familiar);
                 });
 
                 return row;
@@ -171,44 +153,129 @@ app.controller('controllerInformacion', function ($scope, $http, $location) {
         });
     };
 
-
-    $scope.select_grupo_familiar();
-
-    $scope.select_load_user = function (pid)
-    {
-        $scope.table_user.ajax.url('php/select_users.php?pid=' + pid).load();
+    $scope.select_load_grupo_familiar = function () {
+        $scope.table_user.ajax.url('offimedicas/all/grupo_familiar').load();
     };
 
+    $scope.crear = function () {
+        console.log('enviando form');
 
-    $scope.form = {};
+        $scope.form.id_usuario = id_usuario;
 
-    $scope.enviar = function () {
+        const send = {
+            "insert": "grupo_familiar",
+            "values": [$scope.form]
+        };
 
 
         $http({
-            method: "POST", url: "./auth/login",
-            data: $scope.form
+            method: "POST",
+            url: "./offimedicas/createAutoincrement",
+            data: send
 
         }).then(function (reponse) {
             console.log(reponse);
             if (reponse.data.status === true) {
+
                 swal({
-                    title: "Authenticacion exitosa",
+                    title: "Registro Creado",
                     icon: "success",
                     button: "Cerrar",
-                  });
+                });
 
-                  window.location.href = "./informacion";
-             }
+                $scope.select_load_grupo_familiar();
+
+                $scope.active_form = false;
+
+                $scope.form = {};
+
+            }
 
         });
 
 
-        console.log($scope.form);
+
+    }
+
+    $scope.eliminar = function (id) {
+
+
+        const send = {
+            delete: "grupo_familiar",
+            where: {
+                "id_grupo_familiar": id
+            }
+        }
+
+        $http({
+            method: "post",
+            url: "./offimedicas/destroy",
+            data: send
+
+        }).then(function (reponse) {
+            console.log(reponse);
+            if (reponse.data.status === true) {
+
+                swal({
+                    title: "Registro Eliminado",
+                    icon: "success",
+                    button: "Cerrar",
+                });
+
+                $scope.select_load_grupo_familiar();
+
+            }
+
+        });
+
+
+
+    }
+
+    $scope.actualizar = function () {
+
+        const id =  $scope.form.id_grupo_familiar;
+        delete $scope.form.id_grupo_familiar;
+
+
+        const send = {
+            update: "grupo_familiar",
+            set: $scope.form,
+            where: {
+                "id_grupo_familiar": id
+            }
+        }
+
+        $http({
+            method: "put",
+            url: "./offimedicas/edit",
+            data: send
+
+        }).then(function (reponse) {
+            console.log(reponse);
+            if (reponse.data.status === true) {
+
+                swal({
+                    title: "Registro Actualizado",
+                    icon: "success",
+                    button: "Cerrar",
+                });
+
+                $scope.select_load_grupo_familiar();
+
+                $scope.active_form = false;
+
+                $scope.form = {};
+
+            }
+
+        });
+
+
+
     }
 
 
-
+    $scope.select_grupo_familiar();
 
 });
-

@@ -127,6 +127,7 @@ class AuthController extends Controller
                 $token = $this->jwt($result);
 
                 $_SESSION['token'] =  $token;
+                $_SESSION['user'] =  $result;
 
 
                 return response()->json([

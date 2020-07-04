@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="style/form.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body ng-controller="controllerRegistro">
@@ -37,42 +38,46 @@
                                 <form ng-submit="enviar()">
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Usuario</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.usuario" required>
+                                        <label for="usuario">Usuario</label>
+                                        <input type="text" class="form-control" id="usuario" minlength="5" ng-model="form.usuario" required>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Nombres</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.nombres" required>
+                                        <label for="nombres">Nombres</label>
+                                        <input type="text" class="form-control" id="nombres" minlength="3" ng-model="form.nombres" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Apellidos</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" ng-model="form.apellidos" required>
+                                        <label for="apellidos">Apellidos</label>
+                                        <input type="text" class="form-control" id="apellidos" minlength="5" ng-model="form.apellidos" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Email</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" ng-model="form.email" required>
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" ng-model="form.email" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Nro. Identificacion</label>
-                                        <input type="number" class="form-control" id="exampleInputEmail1" ng-model="form.identificacion" required>
+                                        <label for="identificacion">Nro. Identificacion</label>
+                                        <input type="number" class="form-control" id="identificacion"  ng-model="form.identificacion" required>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Contraseña</label>
-                                        <input type="password" class="form-control" id="exampleInputPassword1" ng-model="form.password" required>
+                                        <label for="password">Contraseña</label>
+                                        <input type="password" class="form-control" id="password" ng-model="form.password" required>
                                     </div>
+
+                                   <p style="color:red">  {{ error }} </p>
+
+
 
 
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <button type="button"
-                                                class="btn btn-secondary  btn-lg btn-block">Cancelar</button>
+                                            <a
+                                                class="btn btn-secondary  btn-lg btn-block" href="/">Cancelar</a>
                                         </div>
                                         <div class="col-lg-6">
                                             <button type="submit"
@@ -102,5 +107,6 @@
 </body>
 
 <script src="controller/app.js"></script>
+<script src="controller/register.js"></script>
 
 </html>

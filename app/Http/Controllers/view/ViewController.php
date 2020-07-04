@@ -163,5 +163,13 @@ class ViewController extends Controller
 
     }
 
+    public function salir(Request $request)
+    {
+
+        session_destroy();
+        return redirect('/');
+
+
+    }
 
 }
